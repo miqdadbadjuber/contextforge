@@ -136,7 +136,7 @@
     .hero-terminal .terminal{box-shadow:0 2px 4px rgba(0,0,0,.3),0 12px 40px rgba(0,0,0,.35)}
 
     /* ── PROBLEM ── */
-    .problem{padding:96px 0;background:var(--bg-alt)}
+    .problem{padding:96px 0}
     .problem-top{max-width:580px;margin-bottom:56px}
     .problem-top p{color:var(--text-2);font-size:17px;line-height:1.65;margin-top:14px}
     .problem-items{display:grid;grid-template-columns:repeat(3,1fr);gap:48px}
@@ -146,7 +146,7 @@
     .problem-item p{font-size:14px;color:var(--text-2);line-height:1.6}
 
     /* ── SOLUTION ── */
-    .solution{padding:96px 0}
+    .solution{padding:96px 0;background:var(--bg-alt)}
     .solution-top{text-align:center;max-width:560px;margin:0 auto 64px}
     .solution-top p{color:var(--text-2);font-size:17px;line-height:1.65;margin-top:14px}
     .pipeline{display:flex;align-items:stretch;justify-content:center;gap:0;overflow-x:auto;padding-bottom:4px}
@@ -157,7 +157,7 @@
     .pipe-arrow{display:flex;align-items:center;flex-shrink:0;color:var(--text-3);padding-bottom:28px}
 
     /* ── HOW IT WORKS ── */
-    .how{padding:96px 0;background:var(--bg-alt)}
+    .how{padding:96px 0}
     .how-top{max-width:520px;margin-bottom:56px}
     .how-top p{color:var(--text-2);font-size:17px;margin-top:14px}
     .how-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
@@ -169,7 +169,7 @@
     .how-step .t-body{padding:16px;font-size:12.5px}
 
     /* ── FEATURES ── */
-    .features{padding:96px 0}
+    .features{padding:96px 0;background:var(--bg-alt)}
     .features-top{max-width:500px;margin-bottom:56px}
     .features-top p{color:var(--text-2);font-size:17px;margin-top:14px}
     .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -180,7 +180,7 @@
     .feat-card p{font-size:14px;color:var(--text-2);line-height:1.6}
 
     /* ── CLI EXAMPLES ── */
-    .cli{padding:96px 0;background:var(--bg-alt)}
+    .cli{padding:96px 0}
     .cli-top{max-width:480px;margin-bottom:48px}
     .cli-top p{color:var(--text-2);font-size:17px;margin-top:14px}
     .cli-tabs{display:flex;gap:4px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px}
@@ -191,7 +191,7 @@
     .cli-panel.active{display:block}
 
     /* ── ARCHITECTURE ── */
-    .arch{padding:96px 0}
+    .arch{padding:96px 0;background:var(--bg-alt)}
     .arch-split{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
     .arch-text{padding-top:8px}
     .arch-text h2{font-size:clamp(24px,3vw,32px);font-weight:700;letter-spacing:-.015em;margin-bottom:16px}
@@ -202,7 +202,7 @@
     .arch-points li::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:6px}
 
     /* ── TECH STACK ── */
-    .techstack{padding:0 0 96px}
+    .techstack{padding:0 0 96px;background:var(--bg-alt)}
     .tech-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);border-radius:var(--r);background:var(--surface);overflow:hidden}
     .tech-cell{padding:20px 24px;border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
     .tech-cell:nth-child(4n){border-right:none}
@@ -251,8 +251,8 @@
     /* ── CTA ── */
     .cta-s{padding:96px 0;text-align:center}
     .cta-s h2{font-size:clamp(28px,3.5vw,40px);font-weight:700;letter-spacing:-.02em;margin-bottom:14px}
-    .cta-s>p{color:var(--text-2);font-size:17px;margin-bottom:32px;max-width:440px;margin-left:auto;margin-right:auto}
-    .cta-btns{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+    .cta-s p:not(.section-intro){color:var(--text-2);font-size:17px;margin-bottom:32px;max-width:440px;margin-left:auto;margin-right:auto}
+    .cta-btns{margin-top: 40px; display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
 
     /* ── Footer ── */
     footer{border-top:1px solid var(--border);padding:28px 0}
@@ -324,7 +324,7 @@
         <a href="https://github.com/MiqdadBadjuber/contextforge" target="_blank" class="nav-gh" aria-label="GitHub">
           <svg class="icon" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
         </a>
-        <a href="#get-started" class="btn btn-primary">Get Started</a>
+        <a href="#get-started" class="btn btn-primary">Coming Soon</a>
       </div>
       <button class="hamburger" id="hamburger" aria-label="Toggle menu"><i></i><i></i><i></i></button>
     </div>
@@ -347,13 +347,13 @@
           <h1 class="reveal reveal-d1">Stop guessing<br>which files matter.</h1>
           <p class="hero-sub reveal reveal-d2">ContextForge scans your repository, scores every file by relevance to your task, and outputs a token-efficient context bundle. One command. No API keys. Runs locally.</p>
           <div class="hero-install reveal reveal-d3">
-            <button class="btn btn-install" onclick="copyCmd('npm install -g contextforge',this)" aria-label="Copy install command">
-              <span><span class="dollar">$</span> npm install -g contextforge</span>
+            <button class="btn btn-install" onclick="copyCmd('npm install -g contextforge@beta',this)" aria-label="Copy install command">
+              <span><span class="dollar">$</span> npm install -g contextforge@beta</span>
               <span class="copy-hint">Copy</span>
             </button>
           </div>
           <div class="hero-btns reveal reveal-d4">
-            <a href="#get-started" class="btn btn-primary">Get Started</a>
+            <a href="#get-started" class="btn btn-primary">Coming Soon</a>
             <a href="https://github.com/MiqdadBadjuber/contextforge" target="_blank" class="btn btn-secondary">
               Star on GitHub
               <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
@@ -383,6 +383,70 @@
               <span class="t-line h" id="tl12">&nbsp;</span>
               <span class="t-line h" id="tl13">  <span class="a">⚡ Context ready — 4,900 tokens (saved 83%)</span></span>
               <span class="t-line h" id="tl14">  <span class="d">→ Copied to clipboard</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ ROADMAP ═══ -->
+    <section class="roadmap" id="roadmap">
+      <div class="container">
+        <div class="roadmap-top reveal">
+          <p class="section-intro">Roadmap</p>
+          <h2>Shipping fast. Staying focused.</h2>
+          <p>Four phases over one month. Community feedback shapes every milestone.</p>
+        </div>
+        <div class="timeline reveal">
+          <div class="timeline-track"></div>
+          <div class="timeline-items">
+            <div class="tl-item current">
+              <div class="tl-dot"></div>
+              <div class="tl-phase">Phase 1</div>
+              <h4>Core</h4>
+              <div class="tl-weeks">August 1 - August 8</div>
+              <ul>
+                <li>Repo scanner with gitignore</li>
+                <li>Keyword relevance scoring</li>
+                <li>Token budget enforcement</li>
+                <li>Output to stdout / clipboard / file</li>
+              </ul>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-phase">Phase 2</div>
+              <h4>Intelligence</h4>
+              <div class="tl-weeks">August 9 - August 16</div>
+              <ul>
+                <li>Import graph analysis</li>
+                <li>Git-aware context</li>
+                <li>AST-aware compression</li>
+                <li>Interactive terminal UI</li>
+              </ul>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-phase">Phase 3</div>
+              <h4>Extensibility</h4>
+              <div class="tl-weeks">August 17 - August 24</div>
+              <ul>
+                <li>Profile system</li>
+                <li>Plugin architecture</li>
+                <li>Multi-language AST</li>
+                <li>Config file support</li>
+              </ul>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-phase">Phase 4</div>
+              <h4>Polish</h4>
+              <div class="tl-weeks">August 25 - September 1</div>
+              <ul>
+                <li>VitePress docs site</li>
+                <li>VS Code extension</li>
+                <li>GitHub Actions integration</li>
+                <li>v1.0.0 release</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -464,17 +528,17 @@
       <div class="container">
         <div class="how-top reveal">
           <p class="section-intro">How it works</p>
-          <h2>Three commands to get started.</h2>
+          <h2>Three commands to try it out.</h2>
           <p>No accounts. No API keys. No cloud. Everything runs on your machine.</p>
         </div>
         <div class="how-steps">
           <div class="how-step reveal">
             <div class="how-num">1</div>
             <h3>Install globally</h3>
-            <p>One npm install. Works on macOS, Linux, and Windows.</p>
+            <p>Install the beta version to start building locally.</p>
             <div class="terminal">
               <div class="terminal-bar"><div class="t-dots"><span class="t-dot t-dot-r"></span><span class="t-dot t-dot-y"></span><span class="t-dot t-dot-g"></span></div><span class="t-title">install</span><div style="width:50px"></div></div>
-              <div class="t-body"><span class="p">$</span> <span class="c">npm install -g contextforge</span>
+              <div class="t-body"><span class="p">$</span> <span class="c">npm install -g contextforge@beta</span>
 <span class="d">added 47 packages in 3.2s</span></div>
             </div>
           </div>
@@ -715,70 +779,6 @@
       </div>
     </section>
 
-    <!-- ═══ ROADMAP ═══ -->
-    <section class="roadmap" id="roadmap">
-      <div class="container">
-        <div class="roadmap-top reveal">
-          <p class="section-intro">Roadmap</p>
-          <h2>Shipping fast. Staying focused.</h2>
-          <p>Four phases over eight weeks. Community feedback shapes every milestone.</p>
-        </div>
-        <div class="timeline reveal">
-          <div class="timeline-track"></div>
-          <div class="timeline-items">
-            <div class="tl-item current">
-              <div class="tl-dot"></div>
-              <div class="tl-phase">Phase 1</div>
-              <h4>Core</h4>
-              <div class="tl-weeks">Week 1–2</div>
-              <ul>
-                <li>Repo scanner with gitignore</li>
-                <li>Keyword relevance scoring</li>
-                <li>Token budget enforcement</li>
-                <li>Output to stdout / clipboard / file</li>
-              </ul>
-            </div>
-            <div class="tl-item">
-              <div class="tl-dot"></div>
-              <div class="tl-phase">Phase 2</div>
-              <h4>Intelligence</h4>
-              <div class="tl-weeks">Week 3–4</div>
-              <ul>
-                <li>Import graph analysis</li>
-                <li>Git-aware context</li>
-                <li>AST-aware compression</li>
-                <li>Interactive terminal UI</li>
-              </ul>
-            </div>
-            <div class="tl-item">
-              <div class="tl-dot"></div>
-              <div class="tl-phase">Phase 3</div>
-              <h4>Extensibility</h4>
-              <div class="tl-weeks">Week 5–6</div>
-              <ul>
-                <li>Profile system</li>
-                <li>Plugin architecture</li>
-                <li>Multi-language AST</li>
-                <li>Config file support</li>
-              </ul>
-            </div>
-            <div class="tl-item">
-              <div class="tl-dot"></div>
-              <div class="tl-phase">Phase 4</div>
-              <h4>Polish</h4>
-              <div class="tl-weeks">Week 7–8</div>
-              <ul>
-                <li>VitePress docs site</li>
-                <li>VS Code extension</li>
-                <li>GitHub Actions integration</li>
-                <li>v1.0.0 release</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- ═══ OPEN SOURCE ═══ -->
     <section class="oss">
       <div class="container">
@@ -854,12 +854,12 @@
     <!-- ═══ CTA ═══ -->
     <section class="cta-s" id="get-started">
       <div class="container">
-        <p class="section-intro reveal">Get started</p>
+        <p class="section-intro reveal">Coming soon</p>
         <h2 class="reveal">Ready to build better context?</h2>
         <p class="reveal">Install ContextForge and go from task to token-optimized context in seconds.</p>
-        <div class="cta-btns reveal">
-          <button class="btn btn-install" onclick="copyCmd('npm install -g contextforge',this)">
-            <span><span class="dollar">$</span> npm install -g contextforge</span>
+        <div class="cta-btns reveal" style="gap: 24px;">
+          <button class="btn btn-install" onclick="copyCmd('npm install -g contextforge@beta',this)">
+            <span><span class="dollar">$</span> npm install -g contextforge@beta</span>
             <span class="copy-hint">Copy</span>
           </button>
           <a href="https://github.com/MiqdadBadjuber/contextforge" target="_blank" class="btn btn-secondary">
