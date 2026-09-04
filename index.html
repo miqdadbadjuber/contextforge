@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ContextForge — Build better AI context, instantly</title>
-  <meta name="description" content="Open source CLI tool that scans your repo and builds token-efficient context bundles for AI coding assistants. One command. No API keys. Runs locally.">
+  <meta name="description"
+    content="Open source CLI tool that scans your repo and builds token-efficient context bundles for AI coding assistants. One command. No API keys. Runs locally.">
   <meta name="theme-color" content="#09090b">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
   <style>
     /* ── Tokens ── */
     :root {
@@ -16,298 +20,1324 @@
       --bg-alt: #0e0e12;
       --surface: #15151a;
       --elevated: #1c1c22;
-      --border: rgba(255,255,255,0.06);
-      --border-2: rgba(255,255,255,0.10);
+      --border: rgba(255, 255, 255, 0.06);
+      --border-2: rgba(255, 255, 255, 0.10);
       --text: #f4f4f5;
       --text-2: #a1a1aa;
       --text-3: #6b6b80;
       --accent: #EAB308;
       --accent-h: #FACC15;
-      --accent-dim: rgba(234,179,8,0.07);
-      --accent-b: rgba(234,179,8,0.18);
+      --accent-dim: rgba(234, 179, 8, 0.07);
+      --accent-b: rgba(234, 179, 8, 0.18);
       --green: #22c55e;
-      --sans: 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-      --mono: 'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+      --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
       --r: 8px;
       --w: 1180px;
     }
 
     /* ── Reset ── */
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-    body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.6;overflow-x:hidden}
-    a{color:inherit;text-decoration:none}
-    button{font-family:inherit;border:none;background:none;cursor:pointer;color:inherit}
-    ::selection{background:var(--accent);color:#000}
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none
+    }
+
+    button {
+      font-family: inherit;
+      border: none;
+      background: none;
+      cursor: pointer;
+      color: inherit
+    }
+
+    ::selection {
+      background: var(--accent);
+      color: #000
+    }
 
     /* ── Utilities ── */
-    .container{max-width:var(--w);margin:0 auto;padding:0 24px}
+    .container {
+      max-width: var(--w);
+      margin: 0 auto;
+      padding: 0 24px
+    }
 
-    .section-intro{
-      font-size:15px;
-      font-weight:600;
-      color:var(--text-3);
-      margin-bottom:14px;
+    .section-intro {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-3);
+      margin-bottom: 14px;
     }
 
     /* ── Buttons ── */
-    .btn{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;padding:10px 20px;border-radius:6px;transition:all .15s;white-space:nowrap}
-    .btn-primary{background:var(--accent);color:#000}
-    .btn-primary:hover{background:var(--accent-h)}
-    .btn-secondary{color:var(--text-2);border:1px solid var(--border-2)}
-    .btn-secondary:hover{color:var(--text);border-color:var(--text-3)}
-    .btn-install{
-      font-family:var(--mono);font-size:14px;font-weight:500;
-      background:var(--surface);color:var(--text);
-      border:1px solid var(--border-2);padding:11px 14px 11px 18px;border-radius:var(--r);gap:14px;
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 6px;
+      transition: all .15s;
+      white-space: nowrap
     }
-    .btn-install:hover{border-color:var(--accent-b);background:var(--elevated)}
-    .btn-install .dollar{color:var(--accent)}
-    .btn-install .copy-hint{color:var(--text-3);font-size:11px;transition:color .15s}
-    .btn-install:hover .copy-hint{color:var(--text-2)}
+
+    .btn-primary {
+      background: var(--accent);
+      color: #000
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-h)
+    }
+
+    .btn-secondary {
+      color: var(--text-2);
+      border: 1px solid var(--border-2)
+    }
+
+    .btn-secondary:hover {
+      color: var(--text);
+      border-color: var(--text-3)
+    }
+
+    .btn-install {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 500;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border-2);
+      padding: 11px 14px 11px 18px;
+      border-radius: var(--r);
+      gap: 14px;
+    }
+
+    .btn-install:hover {
+      border-color: var(--accent-b);
+      background: var(--elevated)
+    }
+
+    .btn-install .dollar {
+      color: var(--accent)
+    }
+
+    .btn-install .copy-hint {
+      color: var(--text-3);
+      font-size: 11px;
+      transition: color .15s
+    }
+
+    .btn-install:hover .copy-hint {
+      color: var(--text-2)
+    }
 
     /* ── Icons ── */
-    .icon{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-    .icon-sm{width:15px;height:15px}
+    .icon {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round
+    }
+
+    .icon-sm {
+      width: 15px;
+      height: 15px
+    }
 
     /* ── Nav ── */
-    nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:background .3s,border-color .3s;border-bottom:1px solid transparent}
-    nav.scrolled{background:rgba(9,9,11,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom-color:var(--border)}
-    .nav-inner{max-width:var(--w);margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
-    .logo{font-weight:800;font-size:17px;letter-spacing:-.03em}
-    .logo span{color:var(--accent)}
-    .nav-center{display:flex;align-items:center;gap:4px}
-    .nav-center a{font-size:14px;color:var(--text-3);padding:6px 12px;border-radius:6px;transition:color .15s}
-    .nav-center a:hover{color:var(--text)}
-    .nav-right{display:flex;align-items:center;gap:10px}
-    .nav-right .btn{font-size:13px;padding:7px 14px}
-    .nav-gh{color:var(--text-3);display:flex;align-items:center;transition:color .15s}
-    .nav-gh:hover{color:var(--text)}
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      transition: background .3s, border-color .3s;
+      border-bottom: 1px solid transparent
+    }
+
+    nav.scrolled {
+      background: rgba(9, 9, 11, .92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom-color: var(--border)
+    }
+
+    .nav-inner {
+      max-width: var(--w);
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: 17px;
+      letter-spacing: -.03em
+    }
+
+    .logo span {
+      color: var(--accent)
+    }
+
+    .nav-center {
+      display: flex;
+      align-items: center;
+      gap: 4px
+    }
+
+    .nav-center a {
+      font-size: 14px;
+      color: var(--text-3);
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: color .15s
+    }
+
+    .nav-center a:hover {
+      color: var(--text)
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .nav-right .btn {
+      font-size: 13px;
+      padding: 7px 14px
+    }
+
+    .nav-gh {
+      color: var(--text-3);
+      display: flex;
+      align-items: center;
+      transition: color .15s
+    }
+
+    .nav-gh:hover {
+      color: var(--text)
+    }
 
     /* Hamburger */
-    .hamburger{display:none;flex-direction:column;gap:5px;padding:6px;cursor:pointer}
-    .hamburger i{display:block;width:18px;height:1.5px;background:var(--text-2);border-radius:2px;transition:all .25s}
-    .hamburger.active i:first-child{transform:translateY(6.5px) rotate(45deg)}
-    .hamburger.active i:nth-child(2){opacity:0;transform:scaleX(0)}
-    .hamburger.active i:last-child{transform:translateY(-6.5px) rotate(-45deg)}
-    .mobile-nav{position:fixed;top:56px;left:0;right:0;background:rgba(9,9,11,.98);backdrop-filter:blur(20px);padding:8px 24px 16px;z-index:99;transform:translateY(-110%);opacity:0;transition:transform .3s ease,opacity .25s ease;pointer-events:none;border-bottom:1px solid var(--border)}
-    .mobile-nav.open{transform:translateY(0);opacity:1;pointer-events:all}
-    .mobile-nav a{display:block;font-size:15px;color:var(--text-2);padding:12px 0;border-bottom:1px solid var(--border);transition:color .15s}
-    .mobile-nav a:last-child{border:none}
-    .mobile-nav a:hover{color:var(--text)}
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      padding: 6px;
+      cursor: pointer
+    }
+
+    .hamburger i {
+      display: block;
+      width: 18px;
+      height: 1.5px;
+      background: var(--text-2);
+      border-radius: 2px;
+      transition: all .25s
+    }
+
+    .hamburger.active i:first-child {
+      transform: translateY(6.5px) rotate(45deg)
+    }
+
+    .hamburger.active i:nth-child(2) {
+      opacity: 0;
+      transform: scaleX(0)
+    }
+
+    .hamburger.active i:last-child {
+      transform: translateY(-6.5px) rotate(-45deg)
+    }
+
+    .mobile-nav {
+      position: fixed;
+      top: 56px;
+      left: 0;
+      right: 0;
+      background: rgba(9, 9, 11, .98);
+      backdrop-filter: blur(20px);
+      padding: 8px 24px 16px;
+      z-index: 99;
+      transform: translateY(-110%);
+      opacity: 0;
+      transition: transform .3s ease, opacity .25s ease;
+      pointer-events: none;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .mobile-nav.open {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: all
+    }
+
+    .mobile-nav a {
+      display: block;
+      font-size: 15px;
+      color: var(--text-2);
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      transition: color .15s
+    }
+
+    .mobile-nav a:last-child {
+      border: none
+    }
+
+    .mobile-nav a:hover {
+      color: var(--text)
+    }
 
     /* ── Terminal ── */
-    .terminal{background:#0b0b10;border:1px solid var(--border-2);border-radius:var(--r);overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25)}
-    .terminal-bar{display:flex;align-items:center;padding:10px 14px;gap:8px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.015)}
-    .t-dots{display:flex;gap:6px}
-    .t-dot{width:10px;height:10px;border-radius:50%}
-    .t-dot-r{background:#ff5f57;opacity:.65}
-    .t-dot-y{background:#febc2e;opacity:.65}
-    .t-dot-g{background:#28c840;opacity:.65}
-    .t-title{flex:1;text-align:center;font-family:var(--mono);font-size:11px;color:var(--text-3)}
-    .t-body{padding:20px;font-family:var(--mono);font-size:13px;line-height:1.75;color:var(--text-2);overflow-x:auto}
-    .t-body .p{color:var(--accent)}
-    .t-body .c{color:var(--text)}
-    .t-body .d{color:#3a3a50}
-    .t-body .g{color:var(--green)}
-    .t-body .a{color:var(--accent)}
-    .t-body .f{display:inline-block;min-width:250px}
-    .t-line{display:block}
-    .t-line.h{opacity:0;transition:opacity .3s ease}
-    .t-line.v{opacity:1}
+    .terminal {
+      background: #0b0b10;
+      border: 1px solid var(--border-2);
+      border-radius: var(--r);
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25)
+    }
 
-    @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-    .cursor{display:inline-block;width:8px;height:15px;background:var(--accent);vertical-align:text-bottom;animation:blink 1s step-end infinite}
+    .terminal-bar {
+      display: flex;
+      align-items: center;
+      padding: 10px 14px;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255, 255, 255, .015)
+    }
+
+    .t-dots {
+      display: flex;
+      gap: 6px
+    }
+
+    .t-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%
+    }
+
+    .t-dot-r {
+      background: #ff5f57;
+      opacity: .65
+    }
+
+    .t-dot-y {
+      background: #febc2e;
+      opacity: .65
+    }
+
+    .t-dot-g {
+      background: #28c840;
+      opacity: .65
+    }
+
+    .t-title {
+      flex: 1;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-3)
+    }
+
+    .t-body {
+      padding: 20px;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.75;
+      color: var(--text-2);
+      overflow-x: auto
+    }
+
+    .t-body .p {
+      color: var(--accent)
+    }
+
+    .t-body .c {
+      color: var(--text)
+    }
+
+    .t-body .d {
+      color: #3a3a50
+    }
+
+    .t-body .g {
+      color: var(--green)
+    }
+
+    .t-body .a {
+      color: var(--accent)
+    }
+
+    .t-body .f {
+      display: inline-block;
+      min-width: 250px
+    }
+
+    .t-line {
+      display: block
+    }
+
+    .t-line.h {
+      opacity: 0;
+      transition: opacity .3s ease
+    }
+
+    .t-line.v {
+      opacity: 1
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: 0
+      }
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 15px;
+      background: var(--accent);
+      vertical-align: text-bottom;
+      animation: blink 1s step-end infinite
+    }
 
     /* ── HERO ── */
-    .hero{padding:130px 0 96px;position:relative}
-    .hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:56px;align-items:center}
-    .hero-badge{
-      display:inline-flex;align-items:center;gap:6px;
-      font-size:13px;font-weight:500;color:var(--text-2);
-      background:var(--surface);border:1px solid var(--border-2);
-      padding:5px 14px 5px 10px;border-radius:20px;margin-bottom:28px;
+    .hero {
+      padding: 130px 0 96px;
+      position: relative
     }
-    .hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
-    .hero h1{font-size:clamp(38px,5.2vw,56px);font-weight:700;line-height:1.08;letter-spacing:-.025em;margin-bottom:20px}
-    .hero-sub{font-size:17px;line-height:1.65;color:var(--text-2);max-width:460px;margin-bottom:32px}
-    .hero-install{margin-bottom:20px}
-    .hero-btns{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-    .hero-terminal .terminal{box-shadow:0 2px 4px rgba(0,0,0,.3),0 12px 40px rgba(0,0,0,.35)}
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.05fr;
+      gap: 56px;
+      align-items: center
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-2);
+      background: var(--surface);
+      border: 1px solid var(--border-2);
+      padding: 5px 14px 5px 10px;
+      border-radius: 20px;
+      margin-bottom: 28px;
+    }
+
+    .hero-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent)
+    }
+
+    .hero h1 {
+      font-size: clamp(38px, 5.2vw, 56px);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -.025em;
+      margin-bottom: 20px
+    }
+
+    .hero-sub {
+      font-size: 17px;
+      line-height: 1.65;
+      color: var(--text-2);
+      max-width: 460px;
+      margin-bottom: 32px
+    }
+
+    .hero-install {
+      margin-bottom: 20px
+    }
+
+    .hero-btns {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap
+    }
+
+    .hero-terminal .terminal {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, .3), 0 12px 40px rgba(0, 0, 0, .35)
+    }
 
     /* ── PROBLEM ── */
-    .problem{padding:96px 0}
-    .problem-top{max-width:580px;margin-bottom:56px}
-    .problem-top p{color:var(--text-2);font-size:17px;line-height:1.65;margin-top:14px}
-    .problem-items{display:grid;grid-template-columns:repeat(3,1fr);gap:48px}
-    .problem-item{border-top:1px solid var(--border-2);padding-top:24px}
-    .problem-num{font-family:var(--mono);font-size:13px;color:var(--text-3);margin-bottom:14px}
-    .problem-item h3{font-size:16px;font-weight:600;margin-bottom:8px}
-    .problem-item p{font-size:14px;color:var(--text-2);line-height:1.6}
+    .problem {
+      padding: 96px 0
+    }
+
+    .problem-top {
+      max-width: 580px;
+      margin-bottom: 56px
+    }
+
+    .problem-top p {
+      color: var(--text-2);
+      font-size: 17px;
+      line-height: 1.65;
+      margin-top: 14px
+    }
+
+    .problem-items {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px
+    }
+
+    .problem-item {
+      border-top: 1px solid var(--border-2);
+      padding-top: 24px
+    }
+
+    .problem-num {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text-3);
+      margin-bottom: 14px
+    }
+
+    .problem-item h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px
+    }
+
+    .problem-item p {
+      font-size: 14px;
+      color: var(--text-2);
+      line-height: 1.6
+    }
 
     /* ── SOLUTION ── */
-    .solution{padding:96px 0;background:var(--bg-alt)}
-    .solution-top{text-align:center;max-width:560px;margin:0 auto 64px}
-    .solution-top p{color:var(--text-2);font-size:17px;line-height:1.65;margin-top:14px}
-    .pipeline{display:flex;align-items:stretch;justify-content:center;gap:0;overflow-x:auto;padding-bottom:4px}
-    .pipe-step{flex:1;min-width:140px;max-width:180px;text-align:center;padding:0 8px}
-    .pipe-icon{width:44px;height:44px;border-radius:10px;background:var(--surface);border:1px solid var(--border-2);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:var(--accent)}
-    .pipe-step h4{font-size:14px;font-weight:600;margin-bottom:4px}
-    .pipe-step p{font-size:12px;color:var(--text-3);line-height:1.45}
-    .pipe-arrow{display:flex;align-items:center;flex-shrink:0;color:var(--text-3);padding-bottom:28px}
+    .solution {
+      padding: 96px 0;
+      background: var(--bg-alt)
+    }
+
+    .solution-top {
+      text-align: center;
+      max-width: 560px;
+      margin: 0 auto 64px
+    }
+
+    .solution-top p {
+      color: var(--text-2);
+      font-size: 17px;
+      line-height: 1.65;
+      margin-top: 14px
+    }
+
+    .pipeline {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      gap: 0;
+      overflow-x: auto;
+      padding-bottom: 4px
+    }
+
+    .pipe-step {
+      flex: 1;
+      min-width: 140px;
+      max-width: 180px;
+      text-align: center;
+      padding: 0 8px
+    }
+
+    .pipe-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+      color: var(--accent)
+    }
+
+    .pipe-step h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px
+    }
+
+    .pipe-step p {
+      font-size: 12px;
+      color: var(--text-3);
+      line-height: 1.45
+    }
+
+    .pipe-arrow {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      color: var(--text-3);
+      padding-bottom: 28px
+    }
 
     /* ── HOW IT WORKS ── */
-    .how{padding:96px 0}
-    .how-top{max-width:520px;margin-bottom:56px}
-    .how-top p{color:var(--text-2);font-size:17px;margin-top:14px}
-    .how-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-    .how-step{display:flex;flex-direction:column}
-    .how-num{font-family:var(--mono);font-size:28px;font-weight:700;color:var(--accent);margin-bottom:14px;line-height:1}
-    .how-step h3{font-size:16px;font-weight:600;margin-bottom:6px}
-    .how-step>p{font-size:14px;color:var(--text-2);line-height:1.55;margin-bottom:20px}
-    .how-step .terminal{flex:1}
-    .how-step .t-body{padding:16px;font-size:12.5px}
+    .how {
+      padding: 96px 0
+    }
+
+    .how-top {
+      max-width: 520px;
+      margin-bottom: 56px
+    }
+
+    .how-top p {
+      color: var(--text-2);
+      font-size: 17px;
+      margin-top: 14px
+    }
+
+    .how-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px
+    }
+
+    .how-step {
+      display: flex;
+      flex-direction: column
+    }
+
+    .how-num {
+      font-family: var(--mono);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 14px;
+      line-height: 1
+    }
+
+    .how-step h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px
+    }
+
+    .how-step>p {
+      font-size: 14px;
+      color: var(--text-2);
+      line-height: 1.55;
+      margin-bottom: 20px
+    }
+
+    .how-step .terminal {
+      flex: 1
+    }
+
+    .how-step .t-body {
+      padding: 16px;
+      font-size: 12.5px
+    }
 
     /* ── FEATURES ── */
-    .features{padding:96px 0;background:var(--bg-alt)}
-    .features-top{max-width:500px;margin-bottom:56px}
-    .features-top p{color:var(--text-2);font-size:17px;margin-top:14px}
-    .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-    .feat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:28px;transition:border-color .2s;border-top:2px solid transparent}
-    .feat-card:hover{border-top-color:var(--accent);border-color:var(--border-2)}
-    .feat-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);margin-bottom:18px;opacity:.7}
-    .feat-card h3{font-size:15px;font-weight:600;margin-bottom:8px}
-    .feat-card p{font-size:14px;color:var(--text-2);line-height:1.6}
+    .features {
+      padding: 96px 0;
+      background: var(--bg-alt)
+    }
+
+    .features-top {
+      max-width: 500px;
+      margin-bottom: 56px
+    }
+
+    .features-top p {
+      color: var(--text-2);
+      font-size: 17px;
+      margin-top: 14px
+    }
+
+    .feat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px
+    }
+
+    .feat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 28px;
+      transition: border-color .2s;
+      border-top: 2px solid transparent
+    }
+
+    .feat-card:hover {
+      border-top-color: var(--accent);
+      border-color: var(--border-2)
+    }
+
+    .feat-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      margin-bottom: 18px;
+      opacity: .7
+    }
+
+    .feat-card h3 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 8px
+    }
+
+    .feat-card p {
+      font-size: 14px;
+      color: var(--text-2);
+      line-height: 1.6
+    }
 
     /* ── CLI EXAMPLES ── */
-    .cli{padding:96px 0}
-    .cli-top{max-width:480px;margin-bottom:48px}
-    .cli-top p{color:var(--text-2);font-size:17px;margin-top:14px}
-    .cli-tabs{display:flex;gap:4px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px}
-    .cli-tab{font-size:13px;font-weight:500;color:var(--text-3);padding:7px 14px;border-radius:6px;border:1px solid transparent;transition:all .15s;white-space:nowrap}
-    .cli-tab:hover{color:var(--text-2)}
-    .cli-tab.active{color:var(--text);background:var(--surface);border-color:var(--border-2)}
-    .cli-panel{display:none}
-    .cli-panel.active{display:block}
+    .cli {
+      padding: 96px 0
+    }
+
+    .cli-top {
+      max-width: 480px;
+      margin-bottom: 48px
+    }
+
+    .cli-top p {
+      color: var(--text-2);
+      font-size: 17px;
+      margin-top: 14px
+    }
+
+    .cli-tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+      padding-bottom: 4px
+    }
+
+    .cli-tab {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-3);
+      padding: 7px 14px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      transition: all .15s;
+      white-space: nowrap
+    }
+
+    .cli-tab:hover {
+      color: var(--text-2)
+    }
+
+    .cli-tab.active {
+      color: var(--text);
+      background: var(--surface);
+      border-color: var(--border-2)
+    }
+
+    .cli-panel {
+      display: none
+    }
+
+    .cli-panel.active {
+      display: block
+    }
 
     /* ── ARCHITECTURE ── */
-    .arch{padding:96px 0;background:var(--bg-alt)}
-    .arch-split{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
-    .arch-text{padding-top:8px}
-    .arch-text h2{font-size:clamp(24px,3vw,32px);font-weight:700;letter-spacing:-.015em;margin-bottom:16px}
-    .arch-text>p{color:var(--text-2);font-size:15px;line-height:1.65;margin-bottom:24px}
-    .arch-points{list-style:none}
-    .arch-points li{font-size:14px;color:var(--text-2);padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:baseline;gap:10px}
-    .arch-points li:last-child{border:none}
-    .arch-points li::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:6px}
+    .arch {
+      padding: 96px 0;
+      background: var(--bg-alt)
+    }
+
+    .arch-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start
+    }
+
+    .arch-text {
+      padding-top: 8px
+    }
+
+    .arch-text h2 {
+      font-size: clamp(24px, 3vw, 32px);
+      font-weight: 700;
+      letter-spacing: -.015em;
+      margin-bottom: 16px
+    }
+
+    .arch-text>p {
+      color: var(--text-2);
+      font-size: 15px;
+      line-height: 1.65;
+      margin-bottom: 24px
+    }
+
+    .arch-points {
+      list-style: none
+    }
+
+    .arch-points li {
+      font-size: 14px;
+      color: var(--text-2);
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: baseline;
+      gap: 10px
+    }
+
+    .arch-points li:last-child {
+      border: none
+    }
+
+    .arch-points li::before {
+      content: '';
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+      margin-top: 6px
+    }
 
     /* ── TECH STACK ── */
-    .techstack{padding:0 0 96px;background:var(--bg-alt)}
-    .tech-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);border-radius:var(--r);background:var(--surface);overflow:hidden}
-    .tech-cell{padding:20px 24px;border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
-    .tech-cell:nth-child(4n){border-right:none}
-    .tech-cell:nth-child(n+5){border-bottom:none}
-    .tech-lbl{font-size:12px;color:var(--text-3);margin-bottom:4px;display:block}
-    .tech-val{font-family:var(--mono);font-size:13px;color:var(--text);font-weight:500}
+    .techstack {
+      padding: 0 0 96px;
+      background: var(--bg-alt)
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      background: var(--surface);
+      overflow: hidden
+    }
+
+    .tech-cell {
+      padding: 20px 24px;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border)
+    }
+
+    .tech-cell:nth-child(4n) {
+      border-right: none
+    }
+
+    .tech-cell:nth-child(n+5) {
+      border-bottom: none
+    }
+
+    .tech-lbl {
+      font-size: 12px;
+      color: var(--text-3);
+      margin-bottom: 4px;
+      display: block
+    }
+
+    .tech-val {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text);
+      font-weight: 500
+    }
 
     /* ── ROADMAP ── */
-    .roadmap{padding:96px 0;background:var(--bg-alt)}
-    .roadmap-top{max-width:480px;margin-bottom:56px}
-    .roadmap-top p{color:var(--text-2);font-size:17px;margin-top:14px}
-    .timeline{position:relative}
-    .timeline-track{position:absolute;top:7px;left:8px;right:8px;height:2px;background:var(--border-2)}
-    .timeline-items{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;position:relative}
-    .tl-item{padding-top:28px}
-    .tl-dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--border-2);background:var(--bg-alt);position:absolute;top:0;z-index:1}
-    .tl-item.current .tl-dot{border-color:var(--accent);background:var(--accent)}
-    .tl-phase{font-size:12px;color:var(--text-3);margin-bottom:6px;font-weight:500}
-    .tl-item h4{font-size:16px;font-weight:600;margin-bottom:2px}
-    .tl-weeks{font-size:12px;color:var(--text-3);margin-bottom:14px}
-    .tl-item ul{list-style:none}
-    .tl-item li{font-size:13px;color:var(--text-2);padding:2px 0;padding-left:14px;position:relative}
-    .tl-item li::before{content:'·';position:absolute;left:3px;color:var(--text-3);font-weight:700}
+    .roadmap {
+      padding: 96px 0;
+      background: var(--bg-alt)
+    }
+
+    .roadmap-top {
+      max-width: 480px;
+      margin-bottom: 56px
+    }
+
+    .roadmap-top p {
+      color: var(--text-2);
+      font-size: 17px;
+      margin-top: 14px
+    }
+
+    .timeline {
+      position: relative
+    }
+
+    .timeline-track {
+      position: absolute;
+      top: 7px;
+      left: 8px;
+      right: 8px;
+      height: 2px;
+      background: var(--border-2)
+    }
+
+    .timeline-items {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      position: relative
+    }
+
+    .tl-item {
+      padding-top: 28px
+    }
+
+    .tl-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid var(--border-2);
+      background: var(--bg-alt);
+      position: absolute;
+      top: 0;
+      z-index: 1
+    }
+
+    .tl-item.current .tl-dot {
+      border-color: var(--accent);
+      background: var(--accent)
+    }
+
+    .tl-phase {
+      font-size: 12px;
+      color: var(--text-3);
+      margin-bottom: 6px;
+      font-weight: 500
+    }
+
+    .tl-item h4 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 2px
+    }
+
+    .tl-weeks {
+      font-size: 12px;
+      color: var(--text-3);
+      margin-bottom: 14px
+    }
+
+    .tl-item ul {
+      list-style: none
+    }
+
+    .tl-item li {
+      font-size: 13px;
+      color: var(--text-2);
+      padding: 2px 0;
+      padding-left: 14px;
+      position: relative
+    }
+
+    .tl-item li::before {
+      content: '·';
+      position: absolute;
+      left: 3px;
+      color: var(--text-3);
+      font-weight: 700
+    }
 
     /* ── OPEN SOURCE ── */
-    .oss{padding:96px 0}
-    .oss-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:48px;display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:center}
-    .oss-text h2{font-size:clamp(24px,3vw,32px);font-weight:700;letter-spacing:-.015em;margin-bottom:14px}
-    .oss-text>p{color:var(--text-2);font-size:15px;line-height:1.65;margin-bottom:28px;max-width:400px}
-    .oss-btns{display:flex;gap:10px;flex-wrap:wrap}
-    .oss-code .t-body{font-size:13px;line-height:1.65}
+    .oss {
+      padding: 96px 0
+    }
+
+    .oss-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 48px;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 48px;
+      align-items: center
+    }
+
+    .oss-text h2 {
+      font-size: clamp(24px, 3vw, 32px);
+      font-weight: 700;
+      letter-spacing: -.015em;
+      margin-bottom: 14px
+    }
+
+    .oss-text>p {
+      color: var(--text-2);
+      font-size: 15px;
+      line-height: 1.65;
+      margin-bottom: 28px;
+      max-width: 400px
+    }
+
+    .oss-btns {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap
+    }
+
+    .oss-code .t-body {
+      font-size: 13px;
+      line-height: 1.65
+    }
 
     /* ── FAQ ── */
-    .faq{padding:96px 0;background:var(--bg-alt)}
-    .faq-top{max-width:480px;margin-bottom:48px}
-    .faq-list{max-width:680px}
-    .faq-item{border-bottom:1px solid var(--border)}
-    .faq-q{width:100%;text-align:left;font-size:15px;font-weight:600;color:var(--text);padding:18px 0;display:flex;align-items:center;justify-content:space-between;gap:16px;transition:color .15s}
-    .faq-q:hover{color:var(--accent)}
-    .faq-chev{flex-shrink:0;width:16px;height:16px;color:var(--text-3);transition:transform .25s}
-    .faq-item.open .faq-chev{transform:rotate(180deg)}
-    .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease}
-    .faq-item.open .faq-a{max-height:200px}
-    .faq-a p{font-size:14px;color:var(--text-2);line-height:1.65;padding-bottom:18px}
+    .faq {
+      padding: 96px 0;
+      background: var(--bg-alt)
+    }
+
+    .faq-top {
+      max-width: 480px;
+      margin-bottom: 48px
+    }
+
+    .faq-list {
+      max-width: 680px
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border)
+    }
+
+    .faq-q {
+      width: 100%;
+      text-align: left;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      padding: 18px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      transition: color .15s
+    }
+
+    .faq-q:hover {
+      color: var(--accent)
+    }
+
+    .faq-chev {
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+      color: var(--text-3);
+      transition: transform .25s
+    }
+
+    .faq-item.open .faq-chev {
+      transform: rotate(180deg)
+    }
+
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .3s ease
+    }
+
+    .faq-item.open .faq-a {
+      max-height: 200px
+    }
+
+    .faq-a p {
+      font-size: 14px;
+      color: var(--text-2);
+      line-height: 1.65;
+      padding-bottom: 18px
+    }
 
     /* ── CTA ── */
-    .cta-s{padding:96px 0;text-align:center}
-    .cta-s h2{font-size:clamp(28px,3.5vw,40px);font-weight:700;letter-spacing:-.02em;margin-bottom:14px}
-    .cta-s p:not(.section-intro){color:var(--text-2);font-size:17px;margin-bottom:32px;max-width:440px;margin-left:auto;margin-right:auto}
-    .cta-btns{margin-top: 40px; display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+    .cta-s {
+      padding: 96px 0;
+      text-align: center
+    }
+
+    .cta-s h2 {
+      font-size: clamp(28px, 3.5vw, 40px);
+      font-weight: 700;
+      letter-spacing: -.02em;
+      margin-bottom: 14px
+    }
+
+    .cta-s p:not(.section-intro) {
+      color: var(--text-2);
+      font-size: 17px;
+      margin-bottom: 32px;
+      max-width: 440px;
+      margin-left: auto;
+      margin-right: auto
+    }
+
+    .cta-btns {
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap
+    }
 
     /* ── Footer ── */
-    footer{border-top:1px solid var(--border);padding:28px 0}
-    .foot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
-    .foot-l{font-size:13px;color:var(--text-3)}
-    .foot-l a{color:var(--accent)}
-    .foot-l a:hover{text-decoration:underline}
-    .foot-r{display:flex;gap:24px}
-    .foot-r a{font-size:13px;color:var(--text-3);transition:color .15s}
-    .foot-r a:hover{color:var(--text)}
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 0
+    }
+
+    .foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px
+    }
+
+    .foot-l {
+      font-size: 13px;
+      color: var(--text-3)
+    }
+
+    .foot-l a {
+      color: var(--accent)
+    }
+
+    .foot-l a:hover {
+      text-decoration: underline
+    }
+
+    .foot-r {
+      display: flex;
+      gap: 24px
+    }
+
+    .foot-r a {
+      font-size: 13px;
+      color: var(--text-3);
+      transition: color .15s
+    }
+
+    .foot-r a:hover {
+      color: var(--text)
+    }
 
     /* ── Animations ── */
-    .reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
-    .reveal.vis{opacity:1;transform:translateY(0)}
-    .reveal-d1{transition-delay:.07s}.reveal-d2{transition-delay:.14s}.reveal-d3{transition-delay:.21s}.reveal-d4{transition-delay:.28s}
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .6s ease, transform .6s ease
+    }
+
+    .reveal.vis {
+      opacity: 1;
+      transform: translateY(0)
+    }
+
+    .reveal-d1 {
+      transition-delay: .07s
+    }
+
+    .reveal-d2 {
+      transition-delay: .14s
+    }
+
+    .reveal-d3 {
+      transition-delay: .21s
+    }
+
+    .reveal-d4 {
+      transition-delay: .28s
+    }
 
     /* ── Responsive ── */
-    @media(max-width:1024px){
-      .hero-grid{grid-template-columns:1fr;gap:48px}
-      .hero{padding:110px 0 72px}
-      .arch-split{grid-template-columns:1fr}
-      .oss-card{grid-template-columns:1fr;padding:36px}
-      .tech-grid{grid-template-columns:repeat(2,1fr)}
-      .tech-cell:nth-child(2n){border-right:none}
-      .tech-cell:nth-child(n+7){border-bottom:none}
-      .tech-cell:nth-child(5),.tech-cell:nth-child(6){border-bottom:1px solid var(--border)}
-    }
-    @media(max-width:768px){
-      .nav-center{display:none}
-      .hamburger{display:flex}
-      .problem-items{grid-template-columns:1fr;gap:32px}
-      .how-steps{grid-template-columns:1fr;gap:32px}
-      .feat-grid{grid-template-columns:repeat(2,1fr)}
-      .timeline-track{display:none}
-      .timeline-items{grid-template-columns:1fr;gap:28px}
-      .tl-dot{position:static;margin-bottom:12px}
-      .tl-item{padding-top:0}
-    }
-    @media(max-width:540px){
-      .hero{padding:96px 0 56px}
-      .hero h1 br{display:none}
-      .feat-grid{grid-template-columns:1fr}
-      .tech-grid{grid-template-columns:1fr}
-      .tech-cell{border-right:none!important;border-bottom:1px solid var(--border)!important}
-      .tech-cell:last-child{border-bottom:none!important}
-      .pipeline{flex-direction:column;align-items:center}
-      .pipe-arrow{transform:rotate(90deg);padding:0;margin:4px 0}
-      .pipe-step{min-width:auto;max-width:200px}
-      .oss-card{padding:24px}
-      footer{padding:20px 0}
+    @media(max-width:1024px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 48px
+      }
+
+      .hero {
+        padding: 110px 0 72px
+      }
+
+      .arch-split {
+        grid-template-columns: 1fr
+      }
+
+      .oss-card {
+        grid-template-columns: 1fr;
+        padding: 36px
+      }
+
+      .tech-grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      .tech-cell:nth-child(2n) {
+        border-right: none
+      }
+
+      .tech-cell:nth-child(n+7) {
+        border-bottom: none
+      }
+
+      .tech-cell:nth-child(5),
+      .tech-cell:nth-child(6) {
+        border-bottom: 1px solid var(--border)
+      }
     }
 
-    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+    @media(max-width:768px) {
+      .nav-center {
+        display: none
+      }
+
+      .hamburger {
+        display: flex
+      }
+
+      .problem-items {
+        grid-template-columns: 1fr;
+        gap: 32px
+      }
+
+      .how-steps {
+        grid-template-columns: 1fr;
+        gap: 32px
+      }
+
+      .feat-grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      .timeline-track {
+        display: none
+      }
+
+      .timeline-items {
+        grid-template-columns: 1fr;
+        gap: 28px
+      }
+
+      .tl-dot {
+        position: static;
+        margin-bottom: 12px
+      }
+
+      .tl-item {
+        padding-top: 0
+      }
+    }
+
+    @media(max-width:540px) {
+      .hero {
+        padding: 96px 0 56px
+      }
+
+      .hero h1 br {
+        display: none
+      }
+
+      .feat-grid {
+        grid-template-columns: 1fr
+      }
+
+      .tech-grid {
+        grid-template-columns: 1fr
+      }
+
+      .tech-cell {
+        border-right: none !important;
+        border-bottom: 1px solid var(--border) !important
+      }
+
+      .tech-cell:last-child {
+        border-bottom: none !important
+      }
+
+      .pipeline {
+        flex-direction: column;
+        align-items: center
+      }
+
+      .pipe-arrow {
+        transform: rotate(90deg);
+        padding: 0;
+        margin: 4px 0
+      }
+
+      .pipe-step {
+        min-width: auto;
+        max-width: 200px
+      }
+
+      .oss-card {
+        padding: 24px
+      }
+
+      footer {
+        padding: 20px 0
+      }
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important
+      }
+    }
   </style>
 </head>
+
 <body>
 
   <!-- ═══ NAV ═══ -->
@@ -322,7 +1352,10 @@
       </div>
       <div class="nav-right">
         <a href="https://github.com/MiqdadBadjuber/contextforge" target="_blank" class="nav-gh" aria-label="GitHub">
-          <svg class="icon" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          <svg class="icon" viewBox="0 0 24 24">
+            <path
+              d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+          </svg>
         </a>
         <a href="#get-started" class="btn btn-primary">Coming Soon</a>
       </div>
@@ -345,9 +1378,11 @@
         <div class="hero-content">
           <div class="hero-badge reveal"><span class="dot"></span>Open Source · MIT Licensed</div>
           <h1 class="reveal reveal-d1">Stop guessing<br>which files matter.</h1>
-          <p class="hero-sub reveal reveal-d2">ContextForge scans your repository, scores every file by relevance to your task, and outputs a token-efficient context bundle. One command. No API keys. Runs locally.</p>
+          <p class="hero-sub reveal reveal-d2">ContextForge scans your repository, scores every file by relevance to
+            your task, and outputs a token-efficient context bundle. One command. No API keys. Runs locally.</p>
           <div class="hero-install reveal reveal-d3">
-            <button class="btn btn-install" onclick="copyCmd('npm install -g contextforge@beta',this)" aria-label="Copy install command">
+            <button class="btn btn-install" onclick="copyCmd('npm install -g contextforge@beta',this)"
+              aria-label="Copy install command">
               <span><span class="dollar">$</span> npm install -g contextforge@beta</span>
               <span class="copy-hint">Copy</span>
             </button>
@@ -356,33 +1391,43 @@
             <a href="#get-started" class="btn btn-primary">Coming Soon</a>
             <a href="https://github.com/MiqdadBadjuber/contextforge" target="_blank" class="btn btn-secondary">
               Star on GitHub
-              <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+              <svg class="icon icon-sm" viewBox="0 0 24 24">
+                <line x1="7" y1="17" x2="17" y2="7" />
+                <polyline points="7 7 17 7 17 17" />
+              </svg>
             </a>
           </div>
         </div>
         <div class="hero-terminal reveal reveal-d2">
           <div class="terminal">
             <div class="terminal-bar">
-              <div class="t-dots"><span class="t-dot t-dot-r"></span><span class="t-dot t-dot-y"></span><span class="t-dot t-dot-g"></span></div>
+              <div class="t-dots"><span class="t-dot t-dot-r"></span><span class="t-dot t-dot-y"></span><span
+                  class="t-dot t-dot-g"></span></div>
               <span class="t-title">contextforge</span>
               <div style="width:50px"></div>
             </div>
             <div class="t-body" id="hero-term">
-              <span class="t-line" id="tl0"><span class="p">$</span> <span class="c" id="typed"></span><span class="cursor" id="cur"></span></span>
+              <span class="t-line" id="tl0"><span class="p">$</span> <span class="c" id="typed"></span><span
+                  class="cursor" id="cur"></span></span>
               <span class="t-line h" id="tl1">&nbsp;</span>
-              <span class="t-line h" id="tl2">  Scanning repository… <span class="d">847 files indexed</span></span>
-              <span class="t-line h" id="tl3">  Ranking files by relevance…</span>
+              <span class="t-line h" id="tl2"> Scanning repository… <span class="d">847 files indexed</span></span>
+              <span class="t-line h" id="tl3"> Ranking files by relevance…</span>
               <span class="t-line h" id="tl4">&nbsp;</span>
-              <span class="t-line h" id="tl5">  <span class="g">✓</span>  <span class="f">src/middleware/auth.ts</span> <span class="d">score: 0.97   2.1k tokens</span></span>
-              <span class="t-line h" id="tl6">  <span class="g">✓</span>  <span class="f">src/middleware/rateLimiter.ts</span> <span class="d">score: 0.91   1.4k tokens</span></span>
-              <span class="t-line h" id="tl7">  <span class="g">✓</span>  <span class="f">src/config/limits.ts</span> <span class="d">score: 0.83   0.6k tokens</span></span>
-              <span class="t-line h" id="tl8">  <span class="g">✓</span>  <span class="f">src/types/auth.d.ts</span> <span class="d">score: 0.78   0.8k tokens</span></span>
-              <span class="t-line h" id="tl9">  <span class="d">✗  src/ui/components/**</span> <span class="d">score: 0.02   skipped</span></span>
+              <span class="t-line h" id="tl5"> <span class="g">✓</span> <span class="f">src/middleware/auth.ts</span>
+                <span class="d">score: 0.97 2.1k tokens</span></span>
+              <span class="t-line h" id="tl6"> <span class="g">✓</span> <span
+                  class="f">src/middleware/rateLimiter.ts</span> <span class="d">score: 0.91 1.4k tokens</span></span>
+              <span class="t-line h" id="tl7"> <span class="g">✓</span> <span class="f">src/config/limits.ts</span>
+                <span class="d">score: 0.83 0.6k tokens</span></span>
+              <span class="t-line h" id="tl8"> <span class="g">✓</span> <span class="f">src/types/auth.d.ts</span> <span
+                  class="d">score: 0.78 0.8k tokens</span></span>
+              <span class="t-line h" id="tl9"> <span class="d">✗ src/ui/components/**</span> <span class="d">score: 0.02
+                  skipped</span></span>
               <span class="t-line h" id="tl10">&nbsp;</span>
-              <span class="t-line h" id="tl11">  Compressing to fit 50k token budget…</span>
+              <span class="t-line h" id="tl11"> Compressing to fit 50k token budget…</span>
               <span class="t-line h" id="tl12">&nbsp;</span>
-              <span class="t-line h" id="tl13">  <span class="a">⚡ Context ready — 4,900 tokens (saved 83%)</span></span>
-              <span class="t-line h" id="tl14">  <span class="d">→ Copied to clipboard</span></span>
+              <span class="t-line h" id="tl13"> <span class="a">⚡ Context ready — 4,900 tokens (saved 83%)</span></span>
+              <span class="t-line h" id="tl14"> <span class="d">→ Copied to clipboard</span></span>
             </div>
           </div>
         </div>
@@ -404,7 +1449,7 @@
               <div class="tl-dot"></div>
               <div class="tl-phase">Phase 1</div>
               <h4>Core</h4>
-              <div class="tl-weeks">August 1 - August 8</div>
+              <div class="tl-weeks">December 1 - December 8</div>
               <ul>
                 <li>Repo scanner with gitignore</li>
                 <li>Keyword relevance scoring</li>
@@ -416,7 +1461,7 @@
               <div class="tl-dot"></div>
               <div class="tl-phase">Phase 2</div>
               <h4>Intelligence</h4>
-              <div class="tl-weeks">August 9 - August 16</div>
+              <div class="tl-weeks">December 9 - December 16</div>
               <ul>
                 <li>Import graph analysis</li>
                 <li>Git-aware context</li>
@@ -428,7 +1473,7 @@
               <div class="tl-dot"></div>
               <div class="tl-phase">Phase 3</div>
               <h4>Extensibility</h4>
-              <div class="tl-weeks">August 17 - August 24</div>
+              <div class="tl-weeks">December 17 - December 24</div>
               <ul>
                 <li>Profile system</li>
                 <li>Plugin architecture</li>
@@ -440,7 +1485,7 @@
               <div class="tl-dot"></div>
               <div class="tl-phase">Phase 4</div>
               <h4>Polish</h4>
-              <div class="tl-weeks">August 25 - September 1</div>
+              <div class="tl-weeks">December 25 - December 31</div>
               <ul>
                 <li>VitePress docs site</li>
                 <li>VS Code extension</li>
@@ -459,23 +1504,27 @@
         <div class="problem-top reveal">
           <p class="section-intro">The problem</p>
           <h2>Every AI coding session starts with the same friction.</h2>
-          <p>You need AI help with a task. So you start copying files. One by one. Guessing which ones are relevant. Hoping you stay within the token limit.</p>
+          <p>You need AI help with a task. So you start copying files. One by one. Guessing which ones are relevant.
+            Hoping you stay within the token limit.</p>
         </div>
         <div class="problem-items">
           <div class="problem-item reveal">
             <div class="problem-num">01</div>
             <h3>Manual file hunting</h3>
-            <p>Digging through your repo, guessing which files matter, copy-pasting them one by one into your prompt.</p>
+            <p>Digging through your repo, guessing which files matter, copy-pasting them one by one into your prompt.
+            </p>
           </div>
           <div class="problem-item reveal reveal-d1">
             <div class="problem-num">02</div>
             <h3>Wasted tokens</h3>
-            <p>Sending irrelevant code that blows past limits, costing money and degrading your AI assistant's response quality.</p>
+            <p>Sending irrelevant code that blows past limits, costing money and degrading your AI assistant's response
+              quality.</p>
           </div>
           <div class="problem-item reveal reveal-d2">
             <div class="problem-num">03</div>
             <h3>No standardization</h3>
-            <p>Every developer builds context differently. No shared process for how teams structure context for AI tools.</p>
+            <p>Every developer builds context differently. No shared process for how teams structure context for AI
+              tools.</p>
           </div>
         </div>
       </div>
@@ -487,35 +1536,69 @@
         <div class="solution-top reveal">
           <p class="section-intro">The solution</p>
           <h2>One command. Done.</h2>
-          <p>Describe your task in plain English. ContextForge indexes your repo, scores every file, compresses to fit your token budget, and outputs a ready-to-use context bundle.</p>
+          <p>Describe your task in plain English. ContextForge indexes your repo, scores every file, compresses to fit
+            your token budget, and outputs a ready-to-use context bundle.</p>
         </div>
         <div class="pipeline reveal">
           <div class="pipe-step">
-            <div class="pipe-icon"><svg class="icon" viewBox="0 0 24 24"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg></div>
+            <div class="pipe-icon"><svg class="icon" viewBox="0 0 24 24">
+                <line x1="17" y1="10" x2="3" y2="10" />
+                <line x1="21" y1="6" x2="3" y2="6" />
+                <line x1="21" y1="14" x2="3" y2="14" />
+                <line x1="17" y1="18" x2="3" y2="18" />
+              </svg></div>
             <h4>Your Task</h4>
             <p>Plain English description</p>
           </div>
-          <div class="pipe-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          <div class="pipe-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.5">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg></div>
           <div class="pipe-step">
-            <div class="pipe-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>
+            <div class="pipe-icon"><svg class="icon" viewBox="0 0 24 24">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+              </svg></div>
             <h4>Index</h4>
             <p>Scan repo &amp; build graph</p>
           </div>
-          <div class="pipe-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          <div class="pipe-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.5">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg></div>
           <div class="pipe-step">
-            <div class="pipe-icon"><svg class="icon" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+            <div class="pipe-icon"><svg class="icon" viewBox="0 0 24 24">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+              </svg></div>
             <h4>Rank</h4>
             <p>Score files by relevance</p>
           </div>
-          <div class="pipe-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          <div class="pipe-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.5">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg></div>
           <div class="pipe-step">
-            <div class="pipe-icon"><svg class="icon" viewBox="0 0 24 24"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div>
+            <div class="pipe-icon"><svg class="icon" viewBox="0 0 24 24">
+                <polyline points="4 14 10 14 10 20" />
+                <polyline points="20 10 14 10 14 4" />
+                <line x1="14" y1="10" x2="21" y2="3" />
+                <line x1="3" y1="21" x2="10" y2="14" />
+              </svg></div>
             <h4>Compress</h4>
             <p>AST-aware trimming</p>
           </div>
-          <div class="pipe-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          <div class="pipe-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.5">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg></div>
           <div class="pipe-step">
-            <div class="pipe-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg></div>
+            <div class="pipe-icon"><svg class="icon" viewBox="0 0 24 24">
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                <rect x="8" y="2" width="8" height="4" rx="1" />
+              </svg></div>
             <h4>Output</h4>
             <p>Clipboard, file, or pipe</p>
           </div>
@@ -537,9 +1620,14 @@
             <h3>Install globally</h3>
             <p>Install the beta version to start building locally.</p>
             <div class="terminal">
-              <div class="terminal-bar"><div class="t-dots"><span class="t-dot t-dot-r"></span><span class="t-dot t-dot-y"></span><span class="t-dot t-dot-g"></span></div><span class="t-title">install</span><div style="width:50px"></div></div>
+              <div class="terminal-bar">
+                <div class="t-dots"><span class="t-dot t-dot-r"></span><span class="t-dot t-dot-y"></span><span
+                    class="t-dot t-dot-g"></span></div><span class="t-title">install</span>
+                <div style="width:50px"></div>
+              </div>
               <div class="t-body"><span class="p">$</span> <span class="c">npm install -g contextforge@beta</span>
-<span class="d">added 47 packages in 3.2s</span></div>
+                <span class="d">added 47 packages in 3.2s</span>
+              </div>
             </div>
           </div>
           <div class="how-step reveal reveal-d1">
@@ -547,12 +1635,17 @@
             <h3>Index your repo</h3>
             <p>Scans your codebase, builds a dependency graph, and caches the index.</p>
             <div class="terminal">
-              <div class="terminal-bar"><div class="t-dots"><span class="t-dot t-dot-r"></span><span class="t-dot t-dot-y"></span><span class="t-dot t-dot-g"></span></div><span class="t-title">init</span><div style="width:50px"></div></div>
+              <div class="terminal-bar">
+                <div class="t-dots"><span class="t-dot t-dot-r"></span><span class="t-dot t-dot-y"></span><span
+                    class="t-dot t-dot-g"></span></div><span class="t-title">init</span>
+                <div style="width:50px"></div>
+              </div>
               <div class="t-body"><span class="p">$</span> <span class="c">cf init && cf scan</span>
-<span class="d">✓ Created .contextforge/</span>
-<span class="d">✓ Indexed 847 files</span>
-<span class="d">✓ Built dependency graph (1,203 edges)</span>
-<span class="d">✓ Cached to .contextforge/cache.json</span></div>
+                <span class="d">✓ Created .contextforge/</span>
+                <span class="d">✓ Indexed 847 files</span>
+                <span class="d">✓ Built dependency graph (1,203 edges)</span>
+                <span class="d">✓ Cached to .contextforge/cache.json</span>
+              </div>
             </div>
           </div>
           <div class="how-step reveal reveal-d2">
@@ -560,10 +1653,15 @@
             <h3>Build context</h3>
             <p>Describe your task. Get a token-optimized bundle, ready to paste.</p>
             <div class="terminal">
-              <div class="terminal-bar"><div class="t-dots"><span class="t-dot t-dot-r"></span><span class="t-dot t-dot-y"></span><span class="t-dot t-dot-g"></span></div><span class="t-title">build</span><div style="width:50px"></div></div>
+              <div class="terminal-bar">
+                <div class="t-dots"><span class="t-dot t-dot-r"></span><span class="t-dot t-dot-y"></span><span
+                    class="t-dot t-dot-g"></span></div><span class="t-title">build</span>
+                <div style="width:50px"></div>
+              </div>
               <div class="t-body"><span class="p">$</span> <span class="c">cf build "fix the login bug" --copy</span>
-<span class="d">✓ 6 files selected (4,200 tokens)</span>
-<span class="a">⚡ Copied to clipboard</span></div>
+                <span class="d">✓ 6 files selected (4,200 tokens)</span>
+                <span class="a">⚡ Copied to clipboard</span>
+              </div>
             </div>
           </div>
         </div>
@@ -582,12 +1680,14 @@
           <div class="feat-card reveal">
             <div class="feat-dot"></div>
             <h3>Relevance Engine</h3>
-            <p>Ranks every file using keyword matching, import graph proximity, git recency, and file type heuristics.</p>
+            <p>Ranks every file using keyword matching, import graph proximity, git recency, and file type heuristics.
+            </p>
           </div>
           <div class="feat-card reveal reveal-d1">
             <div class="feat-dot"></div>
             <h3>Token Budget</h3>
-            <p>Auto-compresses context with AST-aware trimming. Strips comments, extracts signatures, or summarizes — always within your limit.</p>
+            <p>Auto-compresses context with AST-aware trimming. Strips comments, extracts signatures, or summarizes —
+              always within your limit.</p>
           </div>
           <div class="feat-card reveal reveal-d2">
             <div class="feat-dot"></div>
@@ -630,92 +1730,132 @@
             <button class="cli-tab" data-p="p-prof" role="tab">Profiles</button>
           </div>
           <div id="p-basic" class="cli-panel active">
-            <div class="terminal"><div class="terminal-bar"><div class="t-dots"><span class="t-dot t-dot-r"></span><span class="t-dot t-dot-y"></span><span class="t-dot t-dot-g"></span></div><span class="t-title">basic usage</span><div style="width:50px"></div></div>
+            <div class="terminal">
+              <div class="terminal-bar">
+                <div class="t-dots"><span class="t-dot t-dot-r"></span><span class="t-dot t-dot-y"></span><span
+                    class="t-dot t-dot-g"></span></div><span class="t-title">basic usage</span>
+                <div style="width:50px"></div>
+              </div>
               <div class="t-body"><span class="d"># Build context and copy to clipboard</span>
-<span class="p">$</span> <span class="c">cf build "fix the cart calculation bug" --copy</span>
+                <span class="p">$</span> <span class="c">cf build "fix the cart calculation bug" --copy</span>
 
-  <span class="g">✓</span>  <span class="f">src/cart/calculations.ts</span>    <span class="d">score: 0.95   1.8k tokens</span>
-  <span class="g">✓</span>  <span class="f">src/cart/types.ts</span>            <span class="d">score: 0.87   0.4k tokens</span>
-  <span class="g">✓</span>  <span class="f">src/cart/hooks/useCart.ts</span>     <span class="d">score: 0.82   1.1k tokens</span>
+                <span class="g">✓</span> <span class="f">src/cart/calculations.ts</span> <span class="d">score: 0.95
+                  1.8k tokens</span>
+                <span class="g">✓</span> <span class="f">src/cart/types.ts</span> <span class="d">score: 0.87 0.4k
+                  tokens</span>
+                <span class="g">✓</span> <span class="f">src/cart/hooks/useCart.ts</span> <span class="d">score: 0.82
+                  1.1k tokens</span>
 
-  <span class="a">⚡ Context ready — 3,300 tokens</span>
-  <span class="d">→ Copied to clipboard</span>
+                <span class="a">⚡ Context ready — 3,300 tokens</span>
+                <span class="d">→ Copied to clipboard</span>
 
-<span class="d"># Save context to a file</span>
-<span class="p">$</span> <span class="c">cf build "refactor payment module" --out context.md</span>
+                <span class="d"># Save context to a file</span>
+                <span class="p">$</span> <span class="c">cf build "refactor payment module" --out context.md</span>
 
-  <span class="a">⚡ Context ready — 8,100 tokens</span>
-  <span class="d">→ Saved to context.md</span></div>
+                <span class="a">⚡ Context ready — 8,100 tokens</span>
+                <span class="d">→ Saved to context.md</span>
+              </div>
             </div>
           </div>
           <div id="p-budget" class="cli-panel">
-            <div class="terminal"><div class="terminal-bar"><div class="t-dots"><span class="t-dot t-dot-r"></span><span class="t-dot t-dot-y"></span><span class="t-dot t-dot-g"></span></div><span class="t-title">token budget</span><div style="width:50px"></div></div>
+            <div class="terminal">
+              <div class="terminal-bar">
+                <div class="t-dots"><span class="t-dot t-dot-r"></span><span class="t-dot t-dot-y"></span><span
+                    class="t-dot t-dot-g"></span></div><span class="t-title">token budget</span>
+                <div style="width:50px"></div>
+              </div>
               <div class="t-body"><span class="d"># Set a model preset with custom budget</span>
-<span class="p">$</span> <span class="c">cf build "add rate limiting" --model claude-sonnet --budget 50000</span>
+                <span class="p">$</span> <span class="c">cf build "add rate limiting" --model claude-sonnet --budget
+                  50000</span>
 
-  <span class="d">Model: claude-sonnet (200k max)</span>
-  <span class="d">Budget: 50,000 tokens</span>
+                <span class="d">Model: claude-sonnet (200k max)</span>
+                <span class="d">Budget: 50,000 tokens</span>
 
-  <span class="g">✓</span>  <span class="f">src/middleware/auth.ts</span>      <span class="d">full       2.1k tokens</span>
-  <span class="g">✓</span>  <span class="f">src/middleware/rateLimit.ts</span>  <span class="d">full       1.4k tokens</span>
-  <span class="g">✓</span>  <span class="f">src/config/limits.ts</span>        <span class="d">trimmed    0.3k tokens</span>
-  <span class="g">✓</span>  <span class="f">src/types/auth.d.ts</span>         <span class="d">signatures 0.2k tokens</span>
+                <span class="g">✓</span> <span class="f">src/middleware/auth.ts</span> <span class="d">full 2.1k
+                  tokens</span>
+                <span class="g">✓</span> <span class="f">src/middleware/rateLimit.ts</span> <span class="d">full 1.4k
+                  tokens</span>
+                <span class="g">✓</span> <span class="f">src/config/limits.ts</span> <span class="d">trimmed 0.3k
+                  tokens</span>
+                <span class="g">✓</span> <span class="f">src/types/auth.d.ts</span> <span class="d">signatures 0.2k
+                  tokens</span>
 
-  <span class="a">⚡ Context ready — 4,000 tokens (budget: 92% remaining)</span></div>
+                <span class="a">⚡ Context ready — 4,000 tokens (budget: 92% remaining)</span>
+              </div>
             </div>
           </div>
           <div id="p-git" class="cli-panel">
-            <div class="terminal"><div class="terminal-bar"><div class="t-dots"><span class="t-dot t-dot-r"></span><span class="t-dot t-dot-y"></span><span class="t-dot t-dot-g"></span></div><span class="t-title">git integration</span><div style="width:50px"></div></div>
+            <div class="terminal">
+              <div class="terminal-bar">
+                <div class="t-dots"><span class="t-dot t-dot-r"></span><span class="t-dot t-dot-y"></span><span
+                    class="t-dot t-dot-g"></span></div><span class="t-title">git integration</span>
+                <div style="width:50px"></div>
+              </div>
               <div class="t-body"><span class="d"># Context from current branch diff</span>
-<span class="p">$</span> <span class="c">cf build "review my changes" --diff</span>
+                <span class="p">$</span> <span class="c">cf build "review my changes" --diff</span>
 
-  <span class="d">Comparing: feature/auth-refactor → main</span>
-  <span class="g">✓</span>  4 files changed, 127 insertions(+), 43 deletions(-)
-  <span class="a">⚡ Context ready — 2,800 tokens</span>
+                <span class="d">Comparing: feature/auth-refactor → main</span>
+                <span class="g">✓</span> 4 files changed, 127 insertions(+), 43 deletions(-)
+                <span class="a">⚡ Context ready — 2,800 tokens</span>
 
-<span class="d"># Context around a specific commit</span>
-<span class="p">$</span> <span class="c">cf build "explain this commit" --commit a3f9c21</span>
+                <span class="d"># Context around a specific commit</span>
+                <span class="p">$</span> <span class="c">cf build "explain this commit" --commit a3f9c21</span>
 
-  <span class="d">Commit: a3f9c21 "refactor auth middleware"</span>
-  <span class="g">✓</span>  3 files in commit scope
-  <span class="a">⚡ Context ready — 1,900 tokens</span>
+                <span class="d">Commit: a3f9c21 "refactor auth middleware"</span>
+                <span class="g">✓</span> 3 files in commit scope
+                <span class="a">⚡ Context ready — 1,900 tokens</span>
 
-<span class="d"># Only staged files</span>
-<span class="p">$</span> <span class="c">cf build "review before commit" --staged</span></div>
+                <span class="d"># Only staged files</span>
+                <span class="p">$</span> <span class="c">cf build "review before commit" --staged</span>
+              </div>
             </div>
           </div>
           <div id="p-inter" class="cli-panel">
-            <div class="terminal"><div class="terminal-bar"><div class="t-dots"><span class="t-dot t-dot-r"></span><span class="t-dot t-dot-y"></span><span class="t-dot t-dot-g"></span></div><span class="t-title">interactive mode</span><div style="width:50px"></div></div>
-              <div class="t-body"><span class="p">$</span> <span class="c">cf build "add user search" --interactive</span>
+            <div class="terminal">
+              <div class="terminal-bar">
+                <div class="t-dots"><span class="t-dot t-dot-r"></span><span class="t-dot t-dot-y"></span><span
+                    class="t-dot t-dot-g"></span></div><span class="t-title">interactive mode</span>
+                <div style="width:50px"></div>
+              </div>
+              <div class="t-body"><span class="p">$</span> <span class="c">cf build "add user search"
+                  --interactive</span>
 
-  <span class="d">Token budget: 50,000</span>
-  <span class="d">Use ↑↓ to navigate, space to toggle, enter to confirm</span>
+                <span class="d">Token budget: 50,000</span>
+                <span class="d">Use ↑↓ to navigate, space to toggle, enter to confirm</span>
 
-  <span class="g">[✓]</span> src/api/users.ts              <span class="d">2.1k tokens</span>
-  <span class="g">[✓]</span> src/api/search.ts             <span class="d">1.6k tokens</span>
-  <span class="g">[✓]</span> src/types/user.ts             <span class="d">0.4k tokens</span>
-  [ ] src/api/admin.ts              <span class="d">3.2k tokens</span>
-  [ ] src/utils/validators.ts       <span class="d">0.8k tokens</span>
+                <span class="g">[✓]</span> src/api/users.ts <span class="d">2.1k tokens</span>
+                <span class="g">[✓]</span> src/api/search.ts <span class="d">1.6k tokens</span>
+                <span class="g">[✓]</span> src/types/user.ts <span class="d">0.4k tokens</span>
+                [ ] src/api/admin.ts <span class="d">3.2k tokens</span>
+                [ ] src/utils/validators.ts <span class="d">0.8k tokens</span>
 
-  <span class="a">Selected: 3 files · 4,100 tokens</span></div>
+                <span class="a">Selected: 3 files · 4,100 tokens</span>
+              </div>
             </div>
           </div>
           <div id="p-prof" class="cli-panel">
-            <div class="terminal"><div class="terminal-bar"><div class="t-dots"><span class="t-dot t-dot-r"></span><span class="t-dot t-dot-y"></span><span class="t-dot t-dot-g"></span></div><span class="t-title">profiles</span><div style="width:50px"></div></div>
+            <div class="terminal">
+              <div class="terminal-bar">
+                <div class="t-dots"><span class="t-dot t-dot-r"></span><span class="t-dot t-dot-y"></span><span
+                    class="t-dot t-dot-g"></span></div><span class="t-title">profiles</span>
+                <div style="width:50px"></div>
+              </div>
               <div class="t-body"><span class="d"># Save a reusable profile</span>
-<span class="p">$</span> <span class="c">cf profile save backend --include "src/api/**" --exclude "src/ui/**"</span>
+                <span class="p">$</span> <span class="c">cf profile save backend --include "src/api/**" --exclude
+                  "src/ui/**"</span>
 
-  <span class="g">✓</span>  Profile "backend" saved
+                <span class="g">✓</span> Profile "backend" saved
 
-<span class="d"># Use the profile</span>
-<span class="p">$</span> <span class="c">cf build "add new endpoint" --profile backend</span>
+                <span class="d"># Use the profile</span>
+                <span class="p">$</span> <span class="c">cf build "add new endpoint" --profile backend</span>
 
-  <span class="d">Profile: backend</span>
-  <span class="d">Include: src/api/**, src/middleware/**</span>
-  <span class="d">Exclude: src/ui/**</span>
+                <span class="d">Profile: backend</span>
+                <span class="d">Include: src/api/**, src/middleware/**</span>
+                <span class="d">Exclude: src/ui/**</span>
 
-  <span class="g">✓</span>  8 files selected
-  <span class="a">⚡ Context ready — 6,400 tokens</span></div>
+                <span class="g">✓</span> 8 files selected
+                <span class="a">⚡ Context ready — 6,400 tokens</span>
+              </div>
             </div>
           </div>
         </div>
@@ -740,22 +1880,26 @@
           </div>
           <div class="reveal reveal-d1">
             <div class="terminal">
-              <div class="terminal-bar"><div class="t-dots"><span class="t-dot t-dot-r"></span><span class="t-dot t-dot-y"></span><span class="t-dot t-dot-g"></span></div><span class="t-title">project structure</span><div style="width:50px"></div></div>
+              <div class="terminal-bar">
+                <div class="t-dots"><span class="t-dot t-dot-r"></span><span class="t-dot t-dot-y"></span><span
+                    class="t-dot t-dot-g"></span></div><span class="t-title">project structure</span>
+                <div style="width:50px"></div>
+              </div>
               <div class="t-body"><span class="c">contextforge/</span>
-├── <span class="c">src/</span>
-│   ├── cli/              <span class="d"># Command definitions</span>
-│   ├── scanner/          <span class="d"># Repo indexing</span>
-│   ├── relevance/        <span class="d"># Scoring engine</span>
-│   ├── compression/      <span class="d"># Token budget logic</span>
-│   ├── output/           <span class="d"># Output formatters</span>
-│   ├── interactive/      <span class="d"># Ink components</span>
-│   ├── plugins/          <span class="d"># Plugin registry</span>
-│   ├── git/              <span class="d"># Git integration</span>
-│   └── utils/            <span class="d"># Shared utilities</span>
-├── tests/
-├── docs/
-├── .contextforge/        <span class="d"># Per-project config</span>
-└── package.json</div>
+                ├── <span class="c">src/</span>
+                │ ├── cli/ <span class="d"># Command definitions</span>
+                │ ├── scanner/ <span class="d"># Repo indexing</span>
+                │ ├── relevance/ <span class="d"># Scoring engine</span>
+                │ ├── compression/ <span class="d"># Token budget logic</span>
+                │ ├── output/ <span class="d"># Output formatters</span>
+                │ ├── interactive/ <span class="d"># Ink components</span>
+                │ ├── plugins/ <span class="d"># Plugin registry</span>
+                │ ├── git/ <span class="d"># Git integration</span>
+                │ └── utils/ <span class="d"># Shared utilities</span>
+                ├── tests/
+                ├── docs/
+                ├── .contextforge/ <span class="d"># Per-project config</span>
+                └── package.json</div>
             </div>
           </div>
         </div>
@@ -769,10 +1913,13 @@
         <div class="tech-grid reveal">
           <div class="tech-cell"><span class="tech-lbl">Runtime</span><span class="tech-val">Node.js 20+</span></div>
           <div class="tech-cell"><span class="tech-lbl">Language</span><span class="tech-val">TypeScript</span></div>
-          <div class="tech-cell"><span class="tech-lbl">CLI Framework</span><span class="tech-val">Commander.js</span></div>
+          <div class="tech-cell"><span class="tech-lbl">CLI Framework</span><span class="tech-val">Commander.js</span>
+          </div>
           <div class="tech-cell"><span class="tech-lbl">Terminal UI</span><span class="tech-val">Ink</span></div>
-          <div class="tech-cell"><span class="tech-lbl">AST Parsing</span><span class="tech-val">tree-sitter</span></div>
-          <div class="tech-cell"><span class="tech-lbl">Token Counting</span><span class="tech-val">tiktoken</span></div>
+          <div class="tech-cell"><span class="tech-lbl">AST Parsing</span><span class="tech-val">tree-sitter</span>
+          </div>
+          <div class="tech-cell"><span class="tech-lbl">Token Counting</span><span class="tech-val">tiktoken</span>
+          </div>
           <div class="tech-cell"><span class="tech-lbl">Caching</span><span class="tech-val">LevelDB</span></div>
           <div class="tech-cell"><span class="tech-lbl">Testing</span><span class="tech-val">Vitest</span></div>
         </div>
@@ -786,33 +1933,43 @@
           <div class="oss-text">
             <p class="section-intro">Open source</p>
             <h2>Open source. Forever free.</h2>
-            <p>ContextForge is MIT licensed. No telemetry, no accounts, no data collection. Read the code, contribute features, or fork it for your own workflow.</p>
+            <p>ContextForge is MIT licensed. No telemetry, no accounts, no data collection. Read the code, contribute
+              features, or fork it for your own workflow.</p>
             <div class="oss-btns">
               <a href="https://github.com/MiqdadBadjuber/contextforge" target="_blank" class="btn btn-primary">
-                <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                <svg class="icon icon-sm" viewBox="0 0 24 24">
+                  <path
+                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                </svg>
                 View on GitHub
               </a>
-              <a href="https://github.com/MiqdadBadjuber/contextforge/blob/main/CONTRIBUTING.md" target="_blank" class="btn btn-secondary">Contributing Guide</a>
+              <a href="https://github.com/MiqdadBadjuber/contextforge/blob/main/CONTRIBUTING.md" target="_blank"
+                class="btn btn-secondary">Contributing Guide</a>
             </div>
           </div>
           <div class="oss-code">
             <div class="terminal">
-              <div class="terminal-bar"><div class="t-dots"><span class="t-dot t-dot-r"></span><span class="t-dot t-dot-y"></span><span class="t-dot t-dot-g"></span></div><span class="t-title">.contextforge.config.json</span><div style="width:50px"></div></div>
+              <div class="terminal-bar">
+                <div class="t-dots"><span class="t-dot t-dot-r"></span><span class="t-dot t-dot-y"></span><span
+                    class="t-dot t-dot-g"></span></div><span class="t-title">.contextforge.config.json</span>
+                <div style="width:50px"></div>
+              </div>
               <div class="t-body">{
-  <span class="a">"defaultModel"</span>: <span class="c">"claude-sonnet"</span>,
-  <span class="a">"defaultBudget"</span>: <span class="c">80000</span>,
-  <span class="a">"ignore"</span>: [
-    <span class="c">"node_modules"</span>,
-    <span class="c">"dist"</span>,
-    <span class="c">"*.test.ts"</span>
-  ],
-  <span class="a">"profiles"</span>: {
-    <span class="a">"backend"</span>: {
-      <span class="a">"include"</span>: [<span class="c">"src/api/**"</span>],
-      <span class="a">"exclude"</span>: [<span class="c">"src/ui/**"</span>]
-    }
-  }
-}</div>
+                <span class="a">"defaultModel"</span>: <span class="c">"claude-sonnet"</span>,
+                <span class="a">"defaultBudget"</span>: <span class="c">80000</span>,
+                <span class="a">"ignore"</span>: [
+                <span class="c">"node_modules"</span>,
+                <span class="c">"dist"</span>,
+                <span class="c">"*.test.ts"</span>
+                ],
+                <span class="a">"profiles"</span>: {
+                <span class="a">"backend"</span>: {
+                <span class="a">"include"</span>: [<span class="c">"src/api/**"</span>],
+                <span class="a">"exclude"</span>: [<span class="c">"src/ui/**"</span>]
+                }
+                }
+                }
+              </div>
             </div>
           </div>
         </div>
@@ -828,24 +1985,58 @@
         </div>
         <div class="faq-list">
           <div class="faq-item reveal">
-            <button class="faq-q" aria-expanded="false">Does ContextForge call AI APIs?<svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-            <div class="faq-a"><p>No. ContextForge prepares context for you to use with any AI assistant — Claude, GPT-4, Gemini, or anything else. It never makes API calls. All processing runs locally.</p></div>
+            <button class="faq-q" aria-expanded="false">Does ContextForge call AI APIs?<svg class="faq-chev"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9" />
+              </svg></button>
+            <div class="faq-a">
+              <p>No. ContextForge prepares context for you to use with any AI assistant — Claude, GPT-4, Gemini, or
+                anything else. It never makes API calls. All processing runs locally.</p>
+            </div>
           </div>
           <div class="faq-item reveal">
-            <button class="faq-q" aria-expanded="false">Does it upload my code anywhere?<svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-            <div class="faq-a"><p>No. Everything runs locally on your machine. No telemetry, no accounts, no cloud, no data collection. Your code never leaves your machine.</p></div>
+            <button class="faq-q" aria-expanded="false">Does it upload my code anywhere?<svg class="faq-chev"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9" />
+              </svg></button>
+            <div class="faq-a">
+              <p>No. Everything runs locally on your machine. No telemetry, no accounts, no cloud, no data collection.
+                Your code never leaves your machine.</p>
+            </div>
           </div>
           <div class="faq-item reveal">
-            <button class="faq-q" aria-expanded="false">What programming languages are supported?<svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-            <div class="faq-a"><p>JavaScript, TypeScript, and Python are supported out of the box with full AST-aware compression. Go, Rust, and Java support is planned for Phase 3. Basic keyword relevance works with any text file.</p></div>
+            <button class="faq-q" aria-expanded="false">What programming languages are supported?<svg class="faq-chev"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9" />
+              </svg></button>
+            <div class="faq-a">
+              <p>JavaScript, TypeScript, and Python are supported out of the box with full AST-aware compression. Go,
+                Rust, and Java support is planned for Phase 3. Basic keyword relevance works with any text file.</p>
+            </div>
           </div>
           <div class="faq-item reveal">
-            <button class="faq-q" aria-expanded="false">How does the relevance engine work?<svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-            <div class="faq-a"><p>It combines five signals: keyword matching, import graph proximity, git recency, file type weighting, and directory heuristics. Each signal contributes to a composite relevance score per file.</p></div>
+            <button class="faq-q" aria-expanded="false">How does the relevance engine work?<svg class="faq-chev"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9" />
+              </svg></button>
+            <div class="faq-a">
+              <p>It combines five signals: keyword matching, import graph proximity, git recency, file type weighting,
+                and directory heuristics. Each signal contributes to a composite relevance score per file.</p>
+            </div>
           </div>
           <div class="faq-item reveal">
-            <button class="faq-q" aria-expanded="false">Can my team use this?<svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-            <div class="faq-a"><p>Yes. Commit .contextforge.config.json to your repository. Team members run cf scan after cloning, and everyone shares the same profiles, ignore rules, and settings.</p></div>
+            <button class="faq-q" aria-expanded="false">Can my team use this?<svg class="faq-chev" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9" />
+              </svg></button>
+            <div class="faq-a">
+              <p>Yes. Commit .contextforge.config.json to your repository. Team members run cf scan after cloning, and
+                everyone shares the same profiles, ignore rules, and settings.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -864,7 +2055,10 @@
           </button>
           <a href="https://github.com/MiqdadBadjuber/contextforge" target="_blank" class="btn btn-secondary">
             View on GitHub
-            <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+            <svg class="icon icon-sm" viewBox="0 0 24 24">
+              <line x1="7" y1="17" x2="17" y2="7" />
+              <polyline points="7 7 17 7 17 17" />
+            </svg>
           </a>
         </div>
       </div>
@@ -875,10 +2069,12 @@
   <!-- ═══ FOOTER ═══ -->
   <footer>
     <div class="container foot">
-      <div class="foot-l">Built by <a href="https://github.com/MiqdadBadjuber" target="_blank">Miqdad Badjuber</a> · MIT License · 2026</div>
+      <div class="foot-l">Built by <a href="https://github.com/MiqdadBadjuber" target="_blank">Miqdad Badjuber</a> · MIT
+        License · 2026</div>
       <div class="foot-r">
         <a href="https://github.com/MiqdadBadjuber/contextforge" target="_blank">GitHub</a>
-        <a href="https://github.com/MiqdadBadjuber/contextforge/blob/main/CONTRIBUTING.md" target="_blank">Contributing</a>
+        <a href="https://github.com/MiqdadBadjuber/contextforge/blob/main/CONTRIBUTING.md"
+          target="_blank">Contributing</a>
         <a href="https://github.com/MiqdadBadjuber/contextforge/blob/main/LICENSE" target="_blank">License</a>
       </div>
     </div>
@@ -921,7 +2117,7 @@
       else { curEl.style.display = 'none'; setTimeout(showLines, 350) }
     }
 
-    const lines = ['tl1','tl2','tl3','tl4','tl5','tl6','tl7','tl8','tl9','tl10','tl11','tl12','tl13','tl14'];
+    const lines = ['tl1', 'tl2', 'tl3', 'tl4', 'tl5', 'tl6', 'tl7', 'tl8', 'tl9', 'tl10', 'tl11', 'tl12', 'tl13', 'tl14'];
     let li = 0;
     function showLines() {
       if (li < lines.length) {
@@ -971,4 +2167,5 @@
   </script>
 
 </body>
+
 </html>
